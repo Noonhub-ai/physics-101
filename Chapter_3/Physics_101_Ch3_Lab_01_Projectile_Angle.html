@@ -7,9 +7,38 @@
 <style>
 :root{--navy:#13243b;--blue:#2563eb;--green:#15803d;--red:#dc2626;--gold:#d97706;--line:#dce5f1;--muted:#52637a}
 *{box-sizing:border-box}body{margin:0;background:#f3f7fc;color:var(--navy);font:16px/1.55 system-ui,-apple-system,Segoe UI,sans-serif}main{max-width:1200px;margin:auto;padding:18px}header,.panel{background:#fff;border:1px solid var(--line);border-radius:18px;padding:20px;margin-bottom:16px;box-shadow:0 3px 15px #1c355a08}header{background:linear-gradient(125deg,#e9f2ff,#fff)}h1{margin:0;font-size:clamp(1.5rem,3vw,2rem)}h2{font-size:1.2rem;margin:0 0 12px}h3{font-size:1rem;margin:16px 0 6px}p{margin:7px 0}small,.muted{color:var(--muted)}.layout{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(280px,1fr);gap:16px}.layout>.panel{min-width:0}canvas{display:block;width:100%;height:auto;border:1px solid #d1e0ef;border-radius:12px;touch-action:none;background:linear-gradient(#ecf8ff,#fff)}.controls{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:15px}.control{padding:12px;background:#f5f9ff;border:1px solid var(--line);border-radius:12px}label{display:block;font-weight:650}input[type=range]{width:100%;accent-color:var(--blue);cursor:pointer}.buttons{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}button{border:0;border-radius:9px;padding:10px 13px;font-weight:700;cursor:pointer;color:white;background:var(--blue)}button.secondary{background:#475569}button:focus-visible,input:focus-visible{outline:3px solid #93c5fd;outline-offset:2px}.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin-top:14px}.stat{border:1px solid var(--line);border-radius:10px;padding:9px;background:#fafcff}.stat span{display:block;color:var(--muted);font-size:.76rem}.stat strong{font-size:.98rem;white-space:nowrap}.math{border-left:4px solid #60a5fa;background:#f4f8ff;padding:10px 13px;margin:9px 0;border-radius:8px}.note{background:#fff8e8;border:1px solid #f4d99c;padding:12px;border-radius:12px;margin-top:13px}.practice{border:1px solid #bcd3ee;background:#f8fbff;border-radius:12px;padding:14px;margin-top:12px}.practice input{max-width:130px;padding:8px;border:1px solid #a7b8cd;border-radius:8px;font:inherit}.practice .q{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin:10px 0}.feedback{font-weight:700;min-height:1.4em}footer{text-align:center;color:var(--muted);font-size:.86rem;padding:14px}kbd{padding:1px 5px;background:#eef2f8;border-radius:4px}@media(max-width:850px){.layout{grid-template-columns:1fr}}@media(max-width:580px){main{padding:10px}header,.panel{padding:13px}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.controls{grid-template-columns:1fr}.stat strong{font-size:.92rem}}
+
+/* Physics 101 shared pastel theme — consistent with Chapters 1 and 2 */
+:root{color-scheme:light;--navy:#26354a;--blue:#6472b9;--green:#247a70;--red:#bf5961;--gold:#946544;--line:#e3deed;--muted:#53647a}
+body{background:radial-gradient(ellipse 70% 32% at 85% 0%,#e8e4ff 0%,transparent 78%),radial-gradient(ellipse 65% 27% at 0% 47%,#e6f7f1 0%,transparent 80%),#faf9ff;color:#26354a}
+.coursebar{background:#fffdfef0;border-bottom:1px solid #e8e1ee}
+.coursebar-inner{max-width:1200px;margin:auto;padding:14px 20px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.coursebrand{font-size:.83rem;font-weight:800;letter-spacing:.12em;text-decoration:none;color:#26354a}
+.courseback{color:#53647a;font-size:.9rem;text-decoration:none}
+.courseback:hover,.coursebrand:hover{color:#287a77}
+header,.panel{border-color:#e3dfeb;box-shadow:0 4px 17px #3e47630a}
+header{background:linear-gradient(125deg,#f1ecff,#e9f7f2 85%);padding:28px}
+header h1{color:#287a77;letter-spacing:-.025em}
+header h2{color:#26354a}
+.panel{background:#fff}
+.control{background:#faf8ff;border-color:#e3deed}
+button{background:#d8f2eb;color:#184d4b;border:1px solid #afd7ce}
+button:hover{background:#c3ebe0}
+button.secondary{background:#eee8ff;color:#514475;border-color:#dbd1f4}
+button.secondary:hover{background:#e1d7fa}
+button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid #9168ac;outline-offset:3px}
+input[type=range]{accent-color:#287a77}
+.stat{background:#fcfbff;border-color:#e3deed}
+.math{background:#f3faf7;border-left-color:#78c2b2}
+.math:nth-of-type(even){background:#f6f3ff;border-left-color:#ada3de}
+.note{background:#fff5ed;border-color:#f1decf;color:#564a45}
+.practice{background:#faf8ff;border-color:#d9d0e8}
+.practice input{border-color:#beb2cf}
+@media(max-width:580px){.coursebar-inner{padding:12px 14px}header{padding:18px}.coursebrand{font-size:.76rem}.courseback{font-size:.8rem}}
 </style>
 </head>
 <body>
+<div class="coursebar"><div class="coursebar-inner"><a class="coursebrand" href="../../index.html">PHYSICS 101 / LABS</a><a class="courseback" href="../../index.html">← Back to Physics 101</a></div></div>
 <main>
 <header><h1>Physics 101 · Chapter 3 · Laboratory 01</h1><h2>Projectile Launched at an Angle</h2><p>Launch a ball from the ground and explore its <b>horizontal range</b>, <b>maximum height</b>, <b>flight time</b>, and velocity vectors.</p><small>Model: no air resistance; g = 10 m/s²; launch and landing at the same height.</small></header>
 <div class="layout">
