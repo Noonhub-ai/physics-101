@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#FAF9FF">
+<meta name="description" content="Physics 101 Chapter 3 Lab 02 — interactive horizontal projectile motion simulation.">
+<title>Physics 101 · Chapter 3 · Lab 02 — Horizontal Projectile</title>
+<style>
+:root{color-scheme:light;--bg:#faf9ff;--ink:#26354a;--muted:#586779;--line:#e3deed;--lavender:#f1ecff;--mint:#e8f7f1;--teal:#287a77;--purple:#6870b6;--red:#c65b64;--gold:#a66d42}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(ellipse 70% 30% at 85% 0%,#e8e4ff 0%,transparent 78%),radial-gradient(ellipse 65% 25% at 0% 45%,#e6f7f1 0%,transparent 80%),var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}.topbar{background:#fffdfef0;border-bottom:1px solid var(--line)}.top-inner{max-width:1200px;padding:15px 18px;margin:auto;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center}.brand{font-weight:800;letter-spacing:.1em;font-size:.83rem}.topbar a{color:var(--ink);text-decoration:none}.topbar a:hover{color:var(--teal)}main{max-width:1200px;margin:auto;padding:18px}.hero,.panel{border:1px solid var(--line);background:#fff;border-radius:18px;padding:20px;margin-bottom:16px;box-shadow:0 4px 17px #3e47630a}.hero{background:linear-gradient(120deg,#f2eeff,#eaf8f2 86%);padding:27px}.eyebrow{font-size:.82rem;text-transform:uppercase;letter-spacing:.15em;color:var(--teal);font-weight:800}h1{font-size:clamp(1.65rem,3.2vw,2.35rem);letter-spacing:-.035em;line-height:1.18;margin:8px 0}h2{font-size:1.24rem;margin:0 0 12px}h3{font-size:1.04rem;margin:0 0 9px}p{margin:9px 0}.muted,small{color:var(--muted)}.layout{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(300px,1fr);gap:16px}.layout>.panel{min-width:0}.scene{width:100%;height:auto;display:block;background:linear-gradient(#edf8ff,#fff);border:1px solid #d8e3ef;border-radius:13px;touch-action:none}.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:.8rem;color:var(--muted);margin:8px 0}.legend b{font-weight:800}.controls{display:grid;grid-template-columns:1fr 1fr;gap:13px}.control{border:1px solid var(--line);background:#faf9ff;border-radius:12px;padding:12px}label{font-weight:650;display:block}input[type=range]{width:100%;accent-color:var(--teal);cursor:pointer}.buttons{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}button{background:#d8f2eb;color:#184d4b;border:1px solid #afd7ce;border-radius:10px;padding:10px 12px;cursor:pointer;font:700 .92rem system-ui}button:hover{background:#c4e9de}.secondary{background:#eee8ff;color:#514475;border-color:#dbd1f4}.secondary:hover{background:#e1d7fa}button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid #9168ac;outline-offset:3px}.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin-top:12px}.stat{background:#fcfbff;border:1px solid var(--line);border-radius:10px;padding:10px}.stat span{display:block;color:var(--muted);font-size:.76rem}.stat strong{display:block;font-size:1rem;white-space:nowrap}.math{border-left:4px solid #78c2b2;background:#f3faf7;border-radius:9px;margin:9px 0;padding:11px}.math.alt{background:#f6f3ff;border-left-color:#aaa1dc}.math div{margin-top:5px}.note{border:1px solid #f1decf;background:#fff5ed;padding:12px;border-radius:12px;margin:14px 0}.challenge{background:#faf8ff;border:1px solid #d9d0e8;padding:15px;border-radius:13px}.answer-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:10px 0}.answer-row label{min-width:195px}.answer-row input{width:125px;padding:8px;border:1px solid #bdb3cc;border-radius:9px;font:inherit}.feedback{font-weight:700;min-height:1.4em}details{margin-top:9px}summary{cursor:pointer;font-weight:650}footer{font-size:.82rem;text-align:center;color:var(--muted);padding:16px}@media(max-width:870px){.layout{grid-template-columns:1fr}}@media(max-width:530px){main{padding:10px}.hero,.panel{padding:14px}.controls{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.stat strong{font-size:.93rem}.top-inner{padding:12px 14px}}
+</style></head><body>
+<header class="topbar"><div class="top-inner"><a class="brand" href="../chapter3/">PHYSICS 101 / CHAPTER 3</a><a href="../chapter3/">← Back to Chapter 3 laboratories</a></div></header>
+<main>
+<section class="hero"><div class="eyebrow">Chapter 3 · Interactive Laboratory 02</div><h1>Horizontal Projectile from a Building</h1><p>Launch a stone <strong>horizontally</strong> from a building. Observe why horizontal speed remains constant while vertical speed increases downward.</p><small>Assumptions: negligible air resistance; g = 10 m/s²; upward is positive; ground is y = 0.</small></section>
+<div class="layout">
+<section class="panel"><h2>Interactive simulation</h2><canvas class="scene" id="canvas" width="800" height="470" aria-label="Interactive physics diagram of a stone traveling horizontally from the top of a building to the ground. Drag the stone along its predicted path."></canvas>
+<div class="legend"><span><b style="color:#6870b6">●</b> total velocity</span><span><b style="color:#c65b64">●</b> horizontal vₓ</span><span><b style="color:#287a77">●</b> vertical vᵧ</span><span><b style="color:#a66d42">●</b> trajectory</span></div>
+<div class="controls">
+<div class="control"><label for="height">Building height: <output id="heightLabel">50</output> m</label><input id="height" type="range" min="10" max="100" step="1" value="50"></div>
+<div class="control"><label for="speed">Initial horizontal speed: <output id="speedLabel">9.49</output> m/s</label><input id="speed" type="range" min="2" max="25" step=".01" value="9.49"></div>
+</div>
+<div class="control" style="margin-top:13px"><label for="time">Inspect the flight: <output id="timeLabel">0.00</output> s</label><input id="time" type="range" min="0" max="1" step=".001" value="0"></div>
+<div class="buttons"><button id="launch">▶ Launch / Resume</button><button class="secondary" id="pause">⏸ Pause</button><button class="secondary" id="step">Step +0.10 s</button><button class="secondary" id="reset">↺ Reset</button><button class="secondary" id="example">Load lecture example</button></div>
+<p class="muted" style="font-size:.88rem">The ball moves in slow motion (0.35×). Pause, use Step, move the time slider, or drag the ball to inspect any moment.</p>
+<div class="stats" aria-live="polite">
+<div class="stat"><span>Flight time elapsed</span><strong id="timeOut">0.00 s</strong></div>
+<div class="stat"><span>Horizontal position x</span><strong id="xOut">0.00 m</strong></div>
+<div class="stat"><span>Height above ground y</span><strong id="yOut">50.00 m</strong></div>
+<div class="stat"><span>Horizontal velocity vₓ</span><strong id="vxOut">9.49 m/s</strong></div>
+<div class="stat"><span>Vertical velocity vᵧ</span><strong id="vyOut">0.00 m/s</strong></div>
+<div class="stat"><span>Current speed |v|</span><strong id="vOut">9.49 m/s</strong></div>
+<div class="stat"><span>Time to impact T</span><strong id="TOut">3.16 s</strong></div>
+<div class="stat"><span>Horizontal range R</span><strong id="ROut">30.01 m</strong></div>
+<div class="stat"><span>Impact speed</span><strong id="impactOut">33.02 m/s</strong></div>
+</div></section>
+<section class="panel"><h2>Understand the physics</h2>
+<div class="math"><strong>Initial conditions</strong><div>θ = 0° → cos 0° = 1, sin 0° = 0</div><div>vₓ₀ = v₀ cos 0° = <b id="eqVx"></b> m/s</div><div>vᵧ₀ = v₀ sin 0° = <b>0</b> m/s</div></div>
+<div class="math alt"><strong>Horizontal motion (aₓ = 0)</strong><div>vₓ = v₀ = <b id="eqXvel"></b> m/s</div><div>Δx = v₀t = <b id="eqX"></b> m</div></div>
+<div class="math"><strong>Vertical motion (aᵧ = −g)</strong><div>vᵧ = −gt = <b id="eqVy"></b> m/s</div><div>Δy = −½gt² = <b id="eqDy"></b> m</div><div>Height now: y = H − ½gt² = <b id="eqY"></b> m</div></div>
+<div class="math alt"><strong>Results at impact</strong><div>T = √(2H/g) = <b id="eqT"></b> s</div><div>R = v₀T = <b id="eqR"></b> m</div><div>vᵧ,impact = −gT = <b id="eqVyi"></b> m/s</div><div>Speed = √(vₓ² + vᵧ²) = <b id="eqImpact"></b> m/s</div></div>
+<div class="note"><strong>Lecture Example 2 — pages 6–7</strong><p>A stone travels 30 m horizontally after falling 50 m. Find its initial speed and impact speed using g = 10 m/s².</p><p>T = √(2 × 50 / 10) = √10 ≈ <b>3.16 s</b><br>v₀ = 30 / √10 ≈ <b>9.49 m/s</b><br>vᵧ,impact ≈ <b>−31.6 m/s</b><br>Impact speed ≈ <b>33 m/s</b>.</p><small>Press “Load lecture example” to reproduce this situation. The simulation uses unrounded values where possible, so displayed results may differ slightly.</small></div>
+</section></div>
+<section class="panel"><h2>Think, predict, test</h2>
+<p><b>1.</b> Predict: if you double the horizontal speed but keep the building height the same, will the flight time change? Check with the controls.</p>
+<p><b>2.</b> Pause halfway through the fall. Why is the vertical velocity negative? What happens to vₓ?</p>
+<p><b>3.</b> Increase the building height without changing v₀. Compare the time of flight, range, and impact speed.</p>
+<div class="challenge"><h3>Practice challenge — check your answers</h3><p>A ball is launched <strong>horizontally at 12 m/s</strong> from a <strong>45 m</strong> building. Take g = 10 m/s². Find:</p>
+<div class="answer-row"><label for="aT">Time to reach ground (s)</label><input type="number" id="aT" step="any" inputmode="decimal" placeholder="seconds"></div>
+<div class="answer-row"><label for="aR">Horizontal range (m)</label><input type="number" id="aR" step="any" inputmode="decimal" placeholder="meters"></div>
+<div class="answer-row"><label for="aV">Impact speed (m/s)</label><input type="number" id="aV" step="any" inputmode="decimal" placeholder="m/s"></div>
+<button id="check">Check answers</button><p class="feedback" id="feedback" role="status"></p>
+<details><summary>Show worked solution</summary><p>Time: T = √(2H/g) = √(2 × 45 / 10) = <strong>3.00 s</strong>.<br>Range: R = v₀T = 12 × 3 = <strong>36.00 m</strong>.<br>Impact: vₓ = 12 m/s; vᵧ = −10 × 3 = −30 m/s.<br>Speed = √(12² + 30²) ≈ <strong>32.31 m/s</strong>.</p></details>
+</div></section>
+<footer>Physics 101 · Chapter 3 · Laboratory 02 · Developed by Dr. Najwa Al Bouzieh · Applied Science University</footer>
+</main>
+<script>
+(()=>{'use strict';const $=id=>document.getElementById(id),canvas=$('canvas'),ctx=canvas.getContext('2d'),g=10;let t=0,running=false,last=null,raf=null,dragging=false;
+const fmt=n=>(Math.abs(n)<.0005?0:n).toFixed(2);
+function model(){const H=+$('height').value,v=+$('speed').value,T=Math.sqrt(2*H/g),R=v*T;return {H,v,T,R,vi:Math.hypot(v,g*T)}}
+function at(m,s){return {x:m.v*s,y:Math.max(0,m.H-.5*g*s*s),vx:m.v,vy:-g*s}}
+function geo(m){const left=142,ground=386,top=37,right=46;const sx=(canvas.width-left-right)/Math.max(12,m.R*1.17),sy=(ground-top)/Math.max(12,m.H*1.12);return {left,ground,sx,sy,X:x=>left+x*sx,Y:y=>ground-y*sy}}
+function line(x1,y1,x2,y2,color,width=2,dash=[]){ctx.strokeStyle=color;ctx.lineWidth=width;ctx.setLineDash(dash);ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();ctx.setLineDash([])}
+function arrow(x,y,dx,dy,color,label){const mag=Math.hypot(dx,dy);if(mag<3)return;line(x,y,x+dx,y+dy,color,3);const a=Math.atan2(dy,dx);ctx.fillStyle=color;ctx.beginPath();ctx.moveTo(x+dx,y+dy);ctx.lineTo(x+dx-9*Math.cos(a-.5),y+dy-9*Math.sin(a-.5));ctx.lineTo(x+dx-9*Math.cos(a+.5),y+dy-9*Math.sin(a+.5));ctx.fill();ctx.font='bold 14px system-ui';ctx.fillText(label,x+dx+5,y+dy-7)}
+function render(m,p){const z=geo(m);ctx.clearRect(0,0,800,470);ctx.fillStyle='#e2f3eb';ctx.fillRect(0,z.ground,800,84);line(10,z.ground,785,z.ground,'#52647a',2);ctx.fillStyle='#d5cfe8';ctx.fillRect(53,z.Y(m.H),89,z.ground-z.Y(m.H));ctx.fillStyle='#9d91bd';ctx.fillRect(53,z.Y(m.H),89,8);ctx.strokeStyle='#b2a5cc';ctx.strokeRect(53,z.Y(m.H),89,z.ground-z.Y(m.H));ctx.fillStyle='#26354a';ctx.font='bold 14px system-ui';ctx.fillText('Building',60,z.ground-16);ctx.font='14px system-ui';ctx.fillText(fmt(m.H)+' m',58,z.Y(m.H)+24);ctx.fillText('x (m)',741,z.ground+24);ctx.fillText('y',z.left-16,z.Y(m.H)-14);
+ctx.setLineDash([7,6]);ctx.strokeStyle='#b9a7a0';ctx.lineWidth=2;ctx.beginPath();for(let i=0;i<=160;i++){let q=at(m,m.T*i/160);i?ctx.lineTo(z.X(q.x),z.Y(q.y)):ctx.moveTo(z.X(q.x),z.Y(q.y))}ctx.stroke();ctx.setLineDash([]);
+ctx.strokeStyle='#a66d42';ctx.lineWidth=3.5;ctx.beginPath();for(let i=0;i<=120;i++){let s=t*i/120,q=at(m,s);i?ctx.lineTo(z.X(q.x),z.Y(q.y)):ctx.moveTo(z.X(q.x),z.Y(q.y))}ctx.stroke();
+let x=z.X(p.x),y=z.Y(p.y);line(z.left,z.Y(m.H),z.left,z.ground,'#8795a7',1,[4,5]);ctx.fillStyle='#26354a';ctx.beginPath();ctx.arc(x,y,8,0,Math.PI*2);ctx.fill();
+const scale=Math.min(5.2,120/Math.max(m.vi,1));arrow(x,y,m.v*scale,0,'#c65b64','vₓ');arrow(x,y,0,-p.vy*scale,'#287a77','vᵧ');arrow(x,y,m.v*scale,-p.vy*scale,'#6870b6','v');
+ctx.fillStyle='#26354a';ctx.font='bold 15px system-ui';ctx.fillText('t = '+fmt(t)+' s',648,30);ctx.font='14px system-ui';ctx.fillText('Range = '+fmt(m.R)+' m',Math.min(z.X(m.R)-85,canvas.width-170),z.ground+55)}
+function update(){const m=model(),p=at(m,t);$('heightLabel').textContent=m.H;$('speedLabel').textContent=fmt(m.v);$('timeLabel').textContent=fmt(t);$('time').max=m.T;$('time').value=t;
+const vals={timeOut:[t,' s'],xOut:[p.x,' m'],yOut:[p.y,' m'],vxOut:[p.vx,' m/s'],vyOut:[p.vy,' m/s'],vOut:[Math.hypot(p.vx,p.vy),' m/s'],TOut:[m.T,' s'],ROut:[m.R,' m'],impactOut:[m.vi,' m/s'],eqVx:[m.v,''],eqXvel:[p.vx,''],eqX:[p.x,''],eqVy:[p.vy,''],eqDy:[p.y-m.H,''],eqY:[p.y,''],eqT:[m.T,''],eqR:[m.R,''],eqVyi:[-g*m.T,''],eqImpact:[m.vi,'']};
+for(const [id,[v,unit]] of Object.entries(vals))$(id).textContent=fmt(v)+unit;render(m,p)}
+function stop(){running=false;last=null;if(raf!==null)cancelAnimationFrame(raf);raf=null}
+function seek(s){const m=model();t=Math.max(0,Math.min(m.T,s));update()}
+function frame(now){if(!running)return;if(last===null)last=now;const delta=Math.min((now-last)/1000,.06);last=now;seek(t+.35*delta);if(t>=model().T){stop();return}raf=requestAnimationFrame(frame)}
+$('launch').onclick=()=>{if(t>=model().T)seek(0);if(!running){running=true;last=null;raf=requestAnimationFrame(frame)}};
+$('pause').onclick=stop;$('step').onclick=()=>{stop();seek(t+.1)};$('reset').onclick=()=>{stop();seek(0)};
+$('example').onclick=()=>{stop();$('height').value=50;$('speed').value=9.49;seek(0)};
+for(const id of ['height','speed'])$(id).oninput=()=>{stop();seek(0)};
+$('time').oninput=()=>{stop();seek(+$('time').value)};
+function drag(e){const m=model(),z=geo(m),r=canvas.getBoundingClientRect(),cx=(e.clientX-r.left)*canvas.width/r.width,cy=(e.clientY-r.top)*canvas.height/r.height,p=at(m,t);if(e.type==='pointerdown'){if(Math.hypot(cx-z.X(p.x),cy-z.Y(p.y))>38)return;stop();dragging=true;canvas.setPointerCapture(e.pointerId)}if(!dragging)return;if(e.type==='pointerup'||e.type==='pointercancel'){dragging=false;return}seek((Math.min(z.X(m.R),Math.max(z.left,cx))-z.left)/(z.X(m.R)-z.left)*m.T)}
+for(const name of ['pointerdown','pointermove','pointerup','pointercancel'])canvas.addEventListener(name,drag);
+$('check').onclick=()=>{const expected=[['aT',3,.04],['aR',36,.15],['aV',Math.sqrt(1044),.12]];let answered=0,correct=0;for(const [id,ans,tol] of expected){const raw=$(id).value.trim();if(raw){answered++;if(Math.abs(Number(raw)-ans)<=tol)correct++}}$('feedback').textContent=!answered?'Enter your answers first.':correct+' / 3 correct. '+(correct===3?'Excellent!':'Check the worked solution and try again.')};
+update();
+})();
+</script></body></html>
