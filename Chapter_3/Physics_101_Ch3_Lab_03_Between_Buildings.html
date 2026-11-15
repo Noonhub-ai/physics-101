@@ -39,7 +39,7 @@
 <div class="answerrow"><label for="ansR">Horizontal distance (m)</label><input type="number" id="ansR" step="any" inputmode="decimal" placeholder="meters"></div>
 <div class="answerrow"><label for="ansV">Impact speed (m/s)</label><input type="number" id="ansV" step="any" inputmode="decimal" placeholder="m/s"></div>
 <button id="check">Check answers</button><p id="feedback" class="feedback" role="status"></p>
-<details><summary>Show worked solution</summary><p>vₓ₀ = 20 cos 30° = 17.32 m/s; vᵧ₀ = 10 m/s.<br>Δy = 15 − 45 = −30 m.<br>−30 = 10t − 5t² → 5t² − 10t − 30 = 0.<br>t = (10 + √700)/10 ≈ <strong>3.65 s</strong>.<br>R = (20 cos 30°)t ≈ <strong>63.22 m</strong>.<br>vᵧ = 10 − 10t ≈ −26.46 m/s.<br>Impact speed = √[(17.32)² + (−26.46)²] ≈ <strong>31.62 m/s</strong>.</p></details>
+<details><summary>Show worked solution</summary><p>vₓ₀ = 20 cos 30° = 17.32 m/s; vᵧ₀ = 10 m/s.<br>Δy = 15 − 45 = −30 m.<br>−30 = 10t − 5t² → 5t² − 10t − 30 = 0.<br>t = (10 + √700)/10 ≈ <strong>3.65 s</strong>.<br>R = (20 cos 30°)t ≈ <strong>63.15 m</strong>.<br>vᵧ = 10 − 10t ≈ −26.46 m/s.<br>Impact speed = √[(17.32)² + (−26.46)²] ≈ <strong>31.62 m/s</strong>.</p></details>
 </div></section>
 <footer>Physics 101 · Chapter 3 · Laboratory 03 · Developed by Dr. Najwa Al Bouzieh · Applied Science University</footer>
 </main>
@@ -61,7 +61,7 @@ const apexT=m.vy/g,apexX=z.X(m.vx*apexT),apexY=z.Y(m.peak);line(apexX,apexY,apex
 const x=z.X(p.x),y=z.Y(p.y);ctx.fillStyle='#26354a';ctx.beginPath();ctx.arc(x,y,8,0,Math.PI*2);ctx.fill();const scale=Math.min(4.8,112/Math.max(m.v,m.impact,1));arrow(x,y,p.vx*scale,0,'#c65b64','vₓ');arrow(x,y,0,-p.vy*scale,'#287a77','vᵧ');arrow(x,y,p.vx*scale,-p.vy*scale,'#6870b6','v');ctx.fillStyle='#26354a';ctx.font='bold 15px system-ui';ctx.fillText('t = '+fmt(t)+' s',675,26);ctx.font='14px system-ui';ctx.fillText('Landing distance = '+fmt(m.R)+' m',Math.max(165,Math.min(roofX-182,570)),z.ground+54)}
 function update(){const m=model(),p=at(m,t);$('speedLabel').textContent=m.v;$('angleLabel').textContent=m.ang;$('startLabel').textContent=m.H1;$('landLabel').textContent=m.H2;$('timeLabel').textContent=fmt(t);$('time').max=m.T;$('time').value=t;
 const vals={tOut:[t,' s'],xOut:[p.x,' m'],yOut:[p.y,' m'],vxOut:[p.vx,' m/s'],vyOut:[p.vy,' m/s'],vOut:[Math.hypot(p.vx,p.vy),' m/s'],peakOut:[m.peak,' m'],TOut:[m.T,' s'],ROut:[m.R,' m'],impactVyOut:[m.impactVy,' m/s'],impactOut:[m.impact,' m/s'],eqVx:[m.vx,''],eqVy:[m.vy,''],eqVxc:[p.vx,''],eqX:[p.x,''],eqDy:[p.y-m.H1,''],eqVyc:[p.vy,''],eqLandingDy:[m.dy,''],eqT:[m.T,''],eqRange:[m.R,''],eqImpact:[m.impact,'']};for(const [id,[value,unit]] of Object.entries(vals))$(id).textContent=fmt(value)+unit;
-$('eqQuadratic').textContent=fmt(.5*g)+'t² − '+fmt(m.vy)+'t + ('+fmt(m.dy)+') = 0 [equivalent: 5t² − vᵧ₀t + Δy = 0]';
+$('eqQuadratic').textContent=fmt(.5*g)+'t² − '+fmt(m.vy)+'t + ('+fmt(m.dy)+') = 0';
 render(m,p)}
 function stop(){running=false;last=null;if(raf)cancelAnimationFrame(raf);raf=0}
 function seek(s){const m=model();t=Math.max(0,Math.min(m.T,s));update()}
