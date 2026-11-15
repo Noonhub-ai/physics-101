@@ -71,7 +71,7 @@ function draw(m,p){let z=setup(m);ctx.clearRect(0,0,c.width,c.height);ctx.fillSt
 let bx=z.sx(p.x),by=z.sy(p.y),scale=Math.min(6.5,110/Math.max(m.v,1));ctx.fillStyle='#17243d';ctx.beginPath();ctx.arc(bx,by,8,0,Math.PI*2);ctx.fill();arrow(bx,by,p.vx*scale,0,'#dc2626','vₓ');arrow(bx,by,0,-p.vy*scale,'#15803d','vᵧ');arrow(bx,by,p.vx*scale,-p.vy*scale,'#2563eb','v');ctx.fillStyle='#13243b';ctx.font='bold 15px system-ui';ctx.fillText('t = '+fmt(t)+' s',c.width-116,26)}
 function stop(){running=false;last=null;cancelAnimationFrame(raf)}
 function seek(s){let m=model();t=Math.min(m.T,Math.max(0,s));metrics()}
-function frame(now){if(!running)return;if(last===null)last=now;let dt=Math.min((now-last)/1000,.06);last=now;seek(t+dt);if(t>=model().T){stop();return}raf=requestAnimationFrame(frame)}
+function frame(now){if(!running)return;if(last===null)last=now;let dt=Math.min((now-last)/1000,.06);last=now;seek(t+dt*0.2);if(t>=model().T){stop();return}raf=requestAnimationFrame(frame)}
 $('launch').onclick=()=>{if(t>=model().T)t=0;if(!running){running=true;last=null;raf=requestAnimationFrame(frame)}};
 $('pause').onclick=stop;$('reset').onclick=()=>{stop();seek(0)};$('step').onclick=()=>{stop();seek(t+.05)};
 $('example').onclick=()=>{stop();$('speed').value=11;$('angle').value=20;seek(0)};
