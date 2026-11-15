@@ -1,1 +1,86 @@
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Physics 101 | Ch 3 Lab 01 — Angled Projectile</title>
+<style>
+:root{--navy:#13243b;--blue:#2563eb;--green:#15803d;--red:#dc2626;--gold:#d97706;--line:#dce5f1;--muted:#52637a}
+*{box-sizing:border-box}body{margin:0;background:#f3f7fc;color:var(--navy);font:16px/1.55 system-ui,-apple-system,Segoe UI,sans-serif}main{max-width:1200px;margin:auto;padding:18px}header,.panel{background:#fff;border:1px solid var(--line);border-radius:18px;padding:20px;margin-bottom:16px;box-shadow:0 3px 15px #1c355a08}header{background:linear-gradient(125deg,#e9f2ff,#fff)}h1{margin:0;font-size:clamp(1.5rem,3vw,2rem)}h2{font-size:1.2rem;margin:0 0 12px}h3{font-size:1rem;margin:16px 0 6px}p{margin:7px 0}small,.muted{color:var(--muted)}.layout{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(280px,1fr);gap:16px}.layout>.panel{min-width:0}canvas{display:block;width:100%;height:auto;border:1px solid #d1e0ef;border-radius:12px;touch-action:none;background:linear-gradient(#ecf8ff,#fff)}.controls{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:15px}.control{padding:12px;background:#f5f9ff;border:1px solid var(--line);border-radius:12px}label{display:block;font-weight:650}input[type=range]{width:100%;accent-color:var(--blue);cursor:pointer}.buttons{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}button{border:0;border-radius:9px;padding:10px 13px;font-weight:700;cursor:pointer;color:white;background:var(--blue)}button.secondary{background:#475569}button:focus-visible,input:focus-visible{outline:3px solid #93c5fd;outline-offset:2px}.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin-top:14px}.stat{border:1px solid var(--line);border-radius:10px;padding:9px;background:#fafcff}.stat span{display:block;color:var(--muted);font-size:.76rem}.stat strong{font-size:.98rem;white-space:nowrap}.math{border-left:4px solid #60a5fa;background:#f4f8ff;padding:10px 13px;margin:9px 0;border-radius:8px}.note{background:#fff8e8;border:1px solid #f4d99c;padding:12px;border-radius:12px;margin-top:13px}.practice{border:1px solid #bcd3ee;background:#f8fbff;border-radius:12px;padding:14px;margin-top:12px}.practice input{max-width:130px;padding:8px;border:1px solid #a7b8cd;border-radius:8px;font:inherit}.practice .q{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin:10px 0}.feedback{font-weight:700;min-height:1.4em}footer{text-align:center;color:var(--muted);font-size:.86rem;padding:14px}kbd{padding:1px 5px;background:#eef2f8;border-radius:4px}@media(max-width:850px){.layout{grid-template-columns:1fr}}@media(max-width:580px){main{padding:10px}header,.panel{padding:13px}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.controls{grid-template-columns:1fr}.stat strong{font-size:.92rem}}
+</style>
+</head>
+<body>
+<main>
+<header><h1>Physics 101 · Chapter 3 · Laboratory 01</h1><h2>Projectile Launched at an Angle</h2><p>Launch a ball from the ground and explore its <b>horizontal range</b>, <b>maximum height</b>, <b>flight time</b>, and velocity vectors.</p><small>Model: no air resistance; g = 10 m/s²; launch and landing at the same height.</small></header>
+<div class="layout">
+<section class="panel">
+<h2>Interactive launch</h2>
+<canvas id="scene" width="780" height="420" aria-label="Interactive projectile motion diagram. Drag the ball along the trajectory to inspect the motion."></canvas>
+<p class="muted"><small><b style="color:#2563eb">Blue</b> = total velocity; <b style="color:#dc2626">red</b> = vₓ; <b style="color:#15803d">green</b> = vᵧ; <b style="color:#d97706">orange</b> = path. Drag the ball or move the time slider to inspect any point.</small></p>
+<div class="controls">
+<div class="control"><label for="speed">Initial speed: <output id="speedLabel">11</output> m/s</label><input id="speed" type="range" min="5" max="30" step=".5" value="11"></div>
+<div class="control"><label for="angle">Launch angle: <output id="angleLabel">20</output>°</label><input id="angle" type="range" min="5" max="85" step="1" value="20"></div>
+</div>
+<div style="margin-top:14px"><label for="time">Inspect flight: <output id="timeLabel">0.00</output> s</label><input id="time" type="range" min="0" max="1" step=".001" value="0"></div>
+<div class="buttons"><button id="launch">▶ Launch / Resume</button><button id="pause" class="secondary">⏸ Pause</button><button id="step" class="secondary">Step +0.05 s</button><button id="reset" class="secondary">↺ Reset</button><button id="example" class="secondary">Lecture example</button></div>
+<div class="stats" aria-live="polite">
+<div class="stat"><span>Time</span><strong id="tVal">0.00 s</strong></div>
+<div class="stat"><span>Position x</span><strong id="xVal">0.00 m</strong></div>
+<div class="stat"><span>Position y</span><strong id="yVal">0.00 m</strong></div>
+<div class="stat"><span>Speed |v|</span><strong id="vVal">11.00 m/s</strong></div>
+<div class="stat"><span>Horizontal vₓ</span><strong id="vxVal">10.34 m/s</strong></div>
+<div class="stat"><span>Vertical vᵧ</span><strong id="vyVal">3.76 m/s</strong></div>
+<div class="stat"><span>Peak height</span><strong id="hVal">0.71 m</strong></div>
+<div class="stat"><span>Range</span><strong id="rVal">7.78 m</strong></div>
+<div class="stat"><span>Flight time</span><strong id="fVal">0.75 s</strong></div>
+</div>
+</section>
+<section class="panel">
+<h2>Connect the motion to equations</h2>
+<div class="math"><b>Initial components</b><div>vₓ₀ = v₀ cos θ = <b id="eqVx"></b> m/s</div><div>vᵧ₀ = v₀ sin θ = <b id="eqVy"></b> m/s</div></div>
+<div class="math"><b>Horizontal: aₓ = 0</b><div>vₓ = vₓ₀ = <b id="eqXvel"></b> m/s</div><div>x = vₓ₀ t = <b id="eqX"></b> m</div></div>
+<div class="math"><b>Vertical: aᵧ = −g</b><div>vᵧ = vᵧ₀ − gt = <b id="eqYvel"></b> m/s</div><div>y = vᵧ₀t − ½gt² = <b id="eqY"></b> m</div></div>
+<div class="math"><b>Same-height landing</b><div>T = 2vᵧ₀/g = <b id="eqT"></b> s</div><div>hₘₐₓ = vᵧ₀²/(2g) = <b id="eqH"></b> m</div><div>R = vₓ₀T = <b id="eqR"></b> m</div></div>
+<p><b>At the top:</b> vᵧ = 0, but vₓ is still nonzero and acceleration is still downward.</p>
+<div class="note"><b>Lecture Example 1</b><p>v₀ = 11 m/s, θ = 20°, g = 10 m/s². The slides round early to vₓ₀ = 10.3 m/s and vᵧ₀ = 3.8 m/s, giving T ≈ 0.76 s, R ≈ 7.8 m, h ≈ 0.72 m. This simulation keeps full precision until the final display, so values differ slightly.</p></div>
+</section>
+</div>
+<section class="panel">
+<h2>Explore and predict</h2>
+<p><b>1.</b> Keep v₀ fixed and compare angles 30°, 45°, and 60°. Which angle gives the greatest range? What do you notice about 30° and 60°?</p>
+<p><b>2.</b> Pause at the peak. What is vᵧ? Is the total velocity zero?</p>
+<p><b>3.</b> Change the initial speed but keep the angle constant. What happens to the range and maximum height?</p>
+<div class="practice"><h3>Practice — check your answers</h3><p>A projectile launches at <b>15 m/s</b> and <b>30°</b> with g = 10 m/s². Calculate:</p>
+<div class="q"><label for="ansT">Flight time T (s)</label><input id="ansT" inputmode="decimal" type="number" step="any" placeholder="e.g. 1.5"></div>
+<div class="q"><label for="ansH">Maximum height h (m)</label><input id="ansH" inputmode="decimal" type="number" step="any" placeholder="e.g. 2.81"></div>
+<div class="q"><label for="ansR">Range R (m)</label><input id="ansR" inputmode="decimal" type="number" step="any" placeholder="e.g. 19.49"></div>
+<button id="check">Check answers</button><p id="feedback" class="feedback" role="status"></p><details><summary>Show worked solution</summary><p>vₓ₀ = 15 cos30° ≈ 12.99 m/s; vᵧ₀ = 15 sin30° = 7.50 m/s.<br>T = 2(7.5)/10 = 1.50 s.<br>h = 7.5²/20 = 2.8125 m.<br>R = (12.99)(1.5) ≈ 19.49 m.</p></details></div>
+</section>
+<footer>Prepared by Dr. Najwa Al Bouzieh · Physics 101 · Interactive Laboratories</footer>
+</main>
+<script>
+(()=>{'use strict';
+const $=id=>document.getElementById(id),c=$('scene'),ctx=c.getContext('2d'),g=10;let t=0,running=false,last=null,dragging=false,raf=0;
+function model(){let v=+$('speed').value,a=+$('angle').value*Math.PI/180,vx=v*Math.cos(a),vy=v*Math.sin(a),T=2*vy/g,R=vx*T,H=vy*vy/(2*g);return {v,a,vx,vy,T,R,H};}
+function fmt(n){return (Math.abs(n)<.0005?0:n).toFixed(2)}
+function pos(m,s){return {x:m.vx*s,y:Math.max(0,m.vy*s-.5*g*s*s),vx:m.vx,vy:m.vy-g*s}}
+function metrics(){let m=model(),p=pos(m,t);$('speedLabel').textContent=+$('speed').value;$('angleLabel').textContent=+$('angle').value;$('time').max=m.T;$('time').value=t;$('timeLabel').textContent=fmt(t);for(let [id,value] of Object.entries({tVal:t,xVal:p.x,yVal:p.y,vVal:Math.hypot(p.vx,p.vy),vxVal:p.vx,vyVal:p.vy,hVal:m.H,rVal:m.R,fVal:m.T,eqVx:m.vx,eqVy:m.vy,eqXvel:p.vx,eqX:p.x,eqYvel:p.vy,eqY:p.y,eqT:m.T,eqH:m.H,eqR:m.R}))$(id).textContent=fmt(value)+(id.endsWith('Val')?(id==='tVal'||id==='fVal'?' s':id==='vxVal'||id==='vyVal'||id==='vVal'?' m/s':' m'):'');draw(m,p)}
+function setup(m){const left=54,right=35,top=32,ground=348,w=c.width-left-right,h=ground-top,maxX=Math.max(9,m.R*1.16),maxY=Math.max(2,m.H*1.45);return {left,ground,sx:x=>left+x/maxX*w,sy:y=>ground-y/maxY*h};}
+function arrow(x,y,dx,dy,col,label){let len=Math.hypot(dx,dy);if(len<2)return;ctx.strokeStyle=ctx.fillStyle=col;ctx.lineWidth=2.8;ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x+dx,y+dy);ctx.stroke();let a=Math.atan2(dy,dx);ctx.beginPath();ctx.moveTo(x+dx,y+dy);ctx.lineTo(x+dx-9*Math.cos(a-.48),y+dy-9*Math.sin(a-.48));ctx.lineTo(x+dx-9*Math.cos(a+.48),y+dy-9*Math.sin(a+.48));ctx.fill();ctx.font='bold 15px system-ui';ctx.fillText(label,x+dx+5,y+dy-7)}
+function draw(m,p){let z=setup(m);ctx.clearRect(0,0,c.width,c.height);ctx.fillStyle='#e0f2e7';ctx.fillRect(0,z.ground,c.width,c.height-z.ground);ctx.strokeStyle='#52647a';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(z.left,18);ctx.lineTo(z.left,z.ground);ctx.lineTo(c.width-18,z.ground);ctx.stroke();ctx.fillStyle='#334155';ctx.font='16px system-ui';ctx.fillText('y (m)',13,23);ctx.fillText('x (m)',c.width-65,z.ground+27);ctx.fillText('0',35,z.ground+19);ctx.strokeStyle='#d97706';ctx.lineWidth=3;ctx.beginPath();for(let i=0;i<=120;i++){let q=pos(m,m.T*i/120),x=z.sx(q.x),y=z.sy(q.y);i?ctx.lineTo(x,y):ctx.moveTo(x,y)}ctx.stroke();let peak=z.sx(m.R/2),peakY=z.sy(m.H),end=z.sx(m.R);ctx.setLineDash([5,5]);ctx.lineWidth=1;ctx.strokeStyle='#94a3b8';ctx.beginPath();ctx.moveTo(peak,peakY);ctx.lineTo(peak,z.ground);ctx.stroke();ctx.setLineDash([]);ctx.fillStyle='#334155';ctx.font='14px system-ui';ctx.fillText('Peak: '+fmt(m.H)+' m',Math.max(z.left+12,Math.min(peak-40,c.width-170)),Math.max(18,peakY-12));ctx.fillText('Range: '+fmt(m.R)+' m',Math.max(z.left+12,Math.min(end-115,c.width-150)),z.ground+48);
+let bx=z.sx(p.x),by=z.sy(p.y),scale=Math.min(6.5,110/Math.max(m.v,1));ctx.fillStyle='#17243d';ctx.beginPath();ctx.arc(bx,by,8,0,Math.PI*2);ctx.fill();arrow(bx,by,p.vx*scale,0,'#dc2626','vₓ');arrow(bx,by,0,-p.vy*scale,'#15803d','vᵧ');arrow(bx,by,p.vx*scale,-p.vy*scale,'#2563eb','v');ctx.fillStyle='#13243b';ctx.font='bold 15px system-ui';ctx.fillText('t = '+fmt(t)+' s',c.width-116,26)}
+function stop(){running=false;last=null;cancelAnimationFrame(raf)}
+function seek(s){let m=model();t=Math.min(m.T,Math.max(0,s));metrics()}
+function frame(now){if(!running)return;if(last===null)last=now;let dt=Math.min((now-last)/1000,.06);last=now;seek(t+dt);if(t>=model().T){stop();return}raf=requestAnimationFrame(frame)}
+$('launch').onclick=()=>{if(t>=model().T)t=0;if(!running){running=true;last=null;raf=requestAnimationFrame(frame)}};
+$('pause').onclick=stop;$('reset').onclick=()=>{stop();seek(0)};$('step').onclick=()=>{stop();seek(t+.05)};
+$('example').onclick=()=>{stop();$('speed').value=11;$('angle').value=20;seek(0)};
+for(let id of ['speed','angle'])$(id).oninput=()=>{stop();seek(0)};
+$('time').oninput=()=>{stop();seek(+$('time').value)};
+function canvasEvent(e){let r=c.getBoundingClientRect(),cx=(e.clientX-r.left)*c.width/r.width,cy=(e.clientY-r.top)*c.height/r.height,m=model(),z=setup(m),p=pos(m,t);if(e.type==='pointerdown'){if(Math.hypot(cx-z.sx(p.x),cy-z.sy(p.y))>35)return;dragging=true;c.setPointerCapture(e.pointerId);stop()}if(!dragging)return;if(e.type==='pointerup'||e.type==='pointercancel'){dragging=false;return}let x=Math.max(z.left,Math.min(z.sx(m.R),cx)),candidate=(x-z.left)/(z.sx(m.R)-z.left)*m.T;seek(candidate)}
+for(let ev of ['pointerdown','pointermove','pointerup','pointercancel'])c.addEventListener(ev,canvasEvent);
+$('check').onclick=()=>{let entries=[['ansT',1.5,.04],['ansH',2.8125,.06],['ansR',19.48557,.12]],correct=0,completed=0;for(let [id,goal,tol] of entries){let value=$(id).value;if(value.trim()!==''){completed++;if(Math.abs(Number(value)-goal)<=tol)correct++}}$('feedback').textContent=completed===0?'Enter your answers first.':correct+' of 3 correct. '+(correct===3?'Excellent!':'Check the worked solution and try again.')};
+metrics();
+})();
+</script>
+</body></html>
