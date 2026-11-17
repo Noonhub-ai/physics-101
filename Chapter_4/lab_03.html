@@ -10,7 +10,7 @@ if(mode==="kinetic"){f=mu*N;state="Kinetic friction acts uphill while the block 
 else if(mode==="static"){f=Math.min(parallel,max);state=parallel<=max+1e-8?"Static friction balances downhill gravity; block can remain at rest.":"Maximum static friction is insufficient to hold the block at rest.";}
 else{state="Frictionless: only weight and the normal force act.";}
 const net=parallel-f;
-let rampX=94,rampY=385,dist=350,endX=rampX+dist*z.ux,endY=rampY+dist*z.uy;
+let rampX=94,rampY=335,dist=350,endX=rampX+dist*z.ux,endY=rampY+dist*z.uy;
 const cx=rampX+dist*.51*z.ux+27*z.nx,cy=rampY+dist*.51*z.uy+27*z.ny;
 const tip="<defs>"+["#3483a9","#2d8b7c","#a5674d","#6555a3","#58687a"].map(c=>'<marker id="head-'+c.slice(1)+'" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="'+c+'"/></marker>').join("")+"</defs>";
 let s=tip+'<text x="20" y="25" font-size="14" fill="#54677c">θ = '+angle+'° · g = 10 m/s²</text><polygon points="'+rampX+','+rampY+' '+endX+','+endY+' '+endX+','+rampY+'" fill="#f3e2c3" stroke="#be9b69" stroke-width="2.4"/>';
