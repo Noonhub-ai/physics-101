@@ -24,6 +24,20 @@ function scene(q){
  h+='<rect x="'+(cx-79)+'" y="280" width="158" height="84" rx="12" fill="#ffe9af" stroke="#bb9454" stroke-width="3"/>';
  h+='<text x="'+cx+'" y="314" font-size="22" text-anchor="middle" fill="#735728" font-weight="800">LOAD</text>';
  h+='<text x="'+cx+'" y="342" font-size="20" text-anchor="middle" fill="#735728" font-weight="750">'+fmt(q.W)+' N</text>';
+ if(visible){
+ // Force-vector inset is intentionally separated from the physical cables and load.
+ // Use the cable directions at the knot; the horizontal/vertical components remain below.
+ const fx=740,fy=292,ux1=-Math.cos(q.a),uy1=-Math.sin(q.a),ux2=Math.cos(q.b),uy2=-Math.sin(q.b);
+ h+='<rect x="615" y="218" width="269" height="156" rx="13" fill="#ffffff" fill-opacity=".97" stroke="#d8d7e9" stroke-width="2"/>';
+ h+='<text x="749" y="242" text-anchor="middle" font-size="16" font-weight="800" fill="#4c6077">Forces at the knot</text>';
+ h+='<circle cx="'+fx+'" cy="'+fy+'" r="6" fill="#536d83"/>';
+ h+=line(fx,fy,fx+ux1*53,fy+uy1*53,"#267f76","teal");
+ h+=line(fx,fy,fx+ux2*53,fy+uy2*53,"#446eb2","blue");
+ h+=line(fx,fy,fx,fy+59,"#b46b4b","orange");
+ h+='<text x="659" y="262" font-size="17" font-weight="750" fill="#267f76">T₁</text>';
+ h+='<text x="815" y="262" font-size="17" font-weight="750" fill="#446eb2">T₂</text>';
+ h+='<text x="756" y="357" font-size="17" font-weight="750" fill="#b46b4b">W</text>';
+ }
  h+='<text x="26" y="388" font-size="15" fill="#51667c">The cables adjust to the chosen angles; the knot stays in static equilibrium.</text>';
  $("scene").innerHTML=h;
 }
