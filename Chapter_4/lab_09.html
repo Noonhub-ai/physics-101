@@ -4,33 +4,54 @@ let visible=true;
 function physics(){const W=+$("weight").value,alpha=+$("left").value,beta=+$("right").value,a=alpha*RAD,b=beta*RAD,D=Math.sin(a+b),T1=W*Math.cos(b)/D,T2=W*Math.cos(a)/D,lx=T1*Math.cos(a),rx=T2*Math.cos(b),ly=T1*Math.sin(a),ry=T2*Math.sin(b);return{W,alpha,beta,a,b,T1,T2,lx,rx,ly,ry,sx:rx-lx,sy:ly+ry-W};}
 const markers='<defs><marker id="teal" markerWidth="8" markerHeight="8" refX="6.1" refY="4" orient="auto"><path d="M0 0L7 4L0 8Z" fill="#267f76"/></marker><marker id="blue" markerWidth="8" markerHeight="8" refX="6.1" refY="4" orient="auto"><path d="M0 0L7 4L0 8Z" fill="#446eb2"/></marker><marker id="orange" markerWidth="8" markerHeight="8" refX="6.1" refY="4" orient="auto"><path d="M0 0L7 4L0 8Z" fill="#b46b4b"/></marker><marker id="purple" markerWidth="8" markerHeight="8" refX="6.1" refY="4" orient="auto"><path d="M0 0L7 4L0 8Z" fill="#735eb2"/></marker></defs>';
 function line(x1,y1,x2,y2,col,marker,dashed=false){return '<path d="M'+x1+' '+y1+'L'+x2+' '+y2+'" stroke="'+col+'" stroke-width="3.7" fill="none" '+(dashed?'stroke-dasharray="7 5"':'')+' marker-end="url(#'+marker+')"/>';}
-function scene(q){const cx=450,cy=230,roof=122,d=cy-roof,leftX=cx-d/Math.tan(q.a),rightX=cx+d/Math.tan(q.b);
-let h=markers+'<text x="18" y="27" font-size="16" fill="#53687c">Angles are measured from the horizontal</text>';
-h+='<path d="M40 '+roof+'H860" stroke="#a4b2c1" stroke-width="10" stroke-linecap="round"/><path d="M'+leftX+' '+(roof+6)+'L'+cx+' '+cy+'L'+rightX+' '+(roof+6)+'" stroke="#8574b2" stroke-width="5" fill="none"/>';
-h+='<circle cx="'+leftX+'" cy="'+(roof+6)+'" r="7" fill="#617c96"/><circle cx="'+rightX+'" cy="'+(roof+6)+'" r="7" fill="#617c96"/>';
-h+='<path d="M'+cx+' '+cy+'V295" stroke="#8574b2" stroke-width="5"/><rect x="413" y="295" width="74" height="54" rx="9" fill="#ffe8a9" stroke="#bd9659" stroke-width="2.4"/><circle cx="'+cx+'" cy="'+cy+'" r="9" fill="#277d74" stroke="white" stroke-width="2"/>';
-h+='<text x="'+cx+'" y="318" text-anchor="middle" font-weight="750" font-size="15" fill="#806333">LOAD</text><text x="'+cx+'" y="337" text-anchor="middle" font-size="13" fill="#806333">'+fmt(q.W)+' N</text>';
-h+='<path d="M'+(cx-65)+' '+cy+'H'+(cx+65)+'" stroke="#99a8b6" stroke-dasharray="5 5" stroke-width="1.8"/>';
-const arc=(side,ang)=>{let px=cx+(side===-1?-42:42),yy=cy-1;return '<text x="'+px+'" y="'+(yy-10)+'" font-size="17" fill="#6659a2">'+ang+'°</text>';};
-h+=arc(-1,q.alpha)+arc(1,q.beta);
-if(visible){
- const scale=1.0;
- h+=line(cx,cy,cx-q.lx*scale,cy-q.ly*scale,"#267f76","teal")+line(cx,cy,cx+q.rx*scale,cy-q.ry*scale,"#446eb2","blue")+line(cx,cy,cx,cy+Math.min(100,q.W*.8),"#b46b4b","orange");
- h+='<text x="'+(cx-q.lx*scale-39)+'" y="'+(cy-q.ly*scale-10)+'" fill="#267f76" font-weight="750" font-size="17">T₁</text><text x="'+(cx+q.rx*scale+6)+'" y="'+(cy-q.ry*scale-9)+'" fill="#446eb2" font-weight="750" font-size="17">T₂</text><text x="'+(cx+11)+'" y="'+(cy+Math.min(100,q.W*.8)+7)+'" fill="#b46b4b" font-weight="750" font-size="17">W</text>';
+
+function scene(q){
+ const cx=450,cy=228,roof=94,d=cy-roof;
+ const leftX=cx-d/Math.tan(q.a),rightX=cx+d/Math.tan(q.b);
+ let h=markers+'<text x="25" y="28" fill="#53687c" font-size="17" font-weight="650">Physical setup · angles measured above the horizontal</text>';
+ h+='<path d="M30 '+roof+'H870" stroke="#abb8c7" stroke-width="10" stroke-linecap="round"/>';
+ h+='<path d="M'+leftX+' '+roof+'L'+cx+' '+cy+'L'+rightX+' '+roof+'" fill="none" stroke="#8272af" stroke-width="5.5" stroke-linecap="round"/>';
+ h+='<circle cx="'+leftX+'" cy="'+roof+'" r="8" fill="#69869c"/><circle cx="'+rightX+'" cy="'+roof+'" r="8" fill="#69869c"/>';
+ h+='<path d="M'+(cx-90)+' '+cy+'H'+(cx+90)+'" stroke="#abb7c3" stroke-width="2" stroke-dasharray="6 7"/>';
+ h+='<path d="M'+cx+' '+cy+'V280" fill="none" stroke="#8272af" stroke-width="5"/>';
+ h+='<circle cx="'+cx+'" cy="'+cy+'" r="9" fill="#267f76" stroke="#fff" stroke-width="3"/>';
+ // Angles sit in dedicated white labels below the cables, away from the tension arrows.
+ h+='<rect x="'+(cx-108)+'" y="'+(cy-50)+'" width="65" height="31" rx="9" fill="#fff" opacity=".96"/>';
+ h+='<rect x="'+(cx+43)+'" y="'+(cy-50)+'" width="65" height="31" rx="9" fill="#fff" opacity=".96"/>';
+ h+='<text x="'+(cx-75)+'" y="'+(cy-29)+'" text-anchor="middle" fill="#655aa1" font-weight="800" font-size="20">'+q.alpha+'°</text>';
+ h+='<text x="'+(cx+76)+'" y="'+(cy-29)+'" text-anchor="middle" fill="#655aa1" font-weight="800" font-size="20">'+q.beta+'°</text>';
+ // Large separate load box: avoid force arrows or labels on top of the object.
+ h+='<rect x="'+(cx-79)+'" y="280" width="158" height="84" rx="12" fill="#ffe9af" stroke="#bb9454" stroke-width="3"/>';
+ h+='<text x="'+cx+'" y="314" font-size="22" text-anchor="middle" fill="#735728" font-weight="800">LOAD</text>';
+ h+='<text x="'+cx+'" y="342" font-size="20" text-anchor="middle" fill="#735728" font-weight="750">'+fmt(q.W)+' N</text>';
+ h+='<text x="26" y="388" font-size="15" fill="#51667c">The cables adjust to the chosen angles; the knot stays in static equilibrium.</text>';
+ $("scene").innerHTML=h;
 }
-h+='<text x="17" y="379" font-size="14" fill="#52697b">Cables change direction with the angle sliders; the load remains in static equilibrium.</text>';
-$("scene").innerHTML=h;
+function components(q){
+ const left=205,right=655,y=171;
+ let h=markers;
+ h+='<text x="22" y="28" font-size="17" font-weight="700" fill="#52677c">Free-body diagram at the knot</text>';
+ h+='<text x="'+left+'" y="55" text-anchor="middle" font-size="17" font-weight="800" fill="#267f76">Left cable T₁</text>';
+ h+='<text x="'+right+'" y="55" text-anchor="middle" font-size="17" font-weight="800" fill="#446eb2">Right cable T₂</text>';
+ h+='<path d="M'+(left-152)+' '+y+'H'+(left+160)+'M'+left+' 78V254 M'+(right-160)+' '+y+'H'+(right+152)+'M'+right+' 78V254" stroke="#bac7d2" stroke-width="1.4" stroke-dasharray="5 6"/>';
+ h+='<circle cx="'+left+'" cy="'+y+'" r="7" fill="#657385"/><circle cx="'+right+'" cy="'+y+'" r="7" fill="#657385"/>';
+ if(visible){
+   const L=88;
+   h+=line(left,y,left-L,y,"#267f76","teal")+line(left,y,left,y-L,"#735eb2","purple");
+   h+=line(right,y,right+L,y,"#446eb2","blue")+line(right,y,right,y-L,"#735eb2","purple");
+   h+='<text x="'+(left-125)+'" y="'+(y-15)+'" font-size="17" font-weight="700" fill="#267f76">T₁ₓ</text>';
+   h+='<text x="'+(left+14)+'" y="'+(y-73)+'" font-size="17" font-weight="700" fill="#735eb2">T₁ᵧ</text>';
+   h+='<text x="'+(right+98)+'" y="'+(y-15)+'" font-size="17" font-weight="700" fill="#446eb2">T₂ₓ</text>';
+   h+='<text x="'+(right+14)+'" y="'+(y-73)+'" font-size="17" font-weight="700" fill="#735eb2">T₂ᵧ</text>';
+   h+='<rect x="30" y="212" width="348" height="35" rx="10" fill="#eaf7f2"/>';
+   h+='<rect x="468" y="212" width="400" height="35" rx="10" fill="#edf1fb"/>';
+   h+='<text x="204" y="235" text-anchor="middle" font-size="17" fill="#255d52">−'+fmt(q.lx)+' N horizontal · +'+fmt(q.ly)+' N vertical</text>';
+   h+='<text x="668" y="235" text-anchor="middle" font-size="17" fill="#3f5e9e">+'+fmt(q.rx)+' N horizontal · +'+fmt(q.ry)+' N vertical</text>';
+ }else{
+   h+='<text x="450" y="205" text-anchor="middle" font-size="19" fill="#607085">Force components hidden</text>';
+ }
+ $("components").innerHTML=h;
 }
-function components(q){const x1=210,x2=685,y=152;let h=markers+'<text x="12" y="27" fill="#586c7f" font-size="15">Components at the knot (positive x right; positive y up)</text>';
-h+='<path d="M60 '+y+'H850 M'+x1+' 48V245 M'+x2+' 48V245" stroke="#bdc7d0" stroke-width="1.4" stroke-dasharray="5 5"/>';
-h+='<text x="95" y="65" fill="#267f76" font-size="17" font-weight="700">Left cable T₁</text><text x="575" y="65" fill="#446eb2" font-size="17" font-weight="700">Right cable T₂</text>';
-if(visible){const s=.45;
- h+=line(x1,y,x1-q.lx*s,y,"#267f76","teal")+line(x1,y,x1,y-q.ly*s,"#735eb2","purple");
- h+=line(x2,y,x2+q.rx*s,y,"#446eb2","blue")+line(x2,y,x2,y-q.ry*s,"#735eb2","purple");
- h+='<text x="70" y="172" fill="#267f76" font-size="15">T₁ₓ = −'+fmt(q.lx)+' N</text><text x="225" y="55" fill="#735eb2" font-size="15">T₁ᵧ = '+fmt(q.ly)+' N</text>';
- h+='<text x="727" y="172" fill="#446eb2" font-size="15">T₂ₓ = +'+fmt(q.rx)+' N</text><text x="699" y="55" fill="#735eb2" font-size="15">T₂ᵧ = '+fmt(q.ry)+' N</text>';
- }else{h+='<text x="300" y="127" fill="#5c6e81" font-size="18">Components hidden — turn them on to inspect the balances.</text>';}
- h+='<text x="19" y="232" font-size="14" fill="#52687d">Horizontal components cancel; vertical components add to support the weight.</text>';$("components").innerHTML=h;}
 function render(){const q=physics();for(const id of ["weight","left","right"])$(id+"Out").textContent=fmt(+$ (id).value);scene(q);components(q);
  $("metrics").innerHTML=[["Left cable T₁",fmt(q.T1)+" N"],["Right cable T₂",fmt(q.T2)+" N"],["Vertical cable T₃",fmt(q.W)+" N"],["Net horizontal force",fmt(q.sx)+" N"],["Net vertical force",fmt(q.sy)+" N"],["Total net force","0 N"]].map(([n,v])=>'<div class="metric"><strong>'+v+'</strong><small>'+n+'</small></div>').join("");
  $("steps").textContent="Static equilibrium at the knot:\nΣFₓ = −T₁cosα + T₂cosβ = 0\nΣFᵧ = T₁sinα + T₂sinβ − W = 0\n\nSolve the two equations:\nT₁ = W cosβ / sin(α + β)\nT₂ = W cosα / sin(α + β)\n\nFor W = "+fmt(q.W)+" N, α = "+fmt(q.alpha)+"°, β = "+fmt(q.beta)+"°:\nT₁ = "+fmt(q.T1)+" N\nT₂ = "+fmt(q.T2)+" N\nT₃ = W = "+fmt(q.W)+" N\n\nCheck ΣFₓ:\n−"+fmt(q.lx)+" + "+fmt(q.rx)+" = "+fmt(q.sx)+" N\n\nCheck ΣFᵧ:\n"+fmt(q.ly)+" + "+fmt(q.ry)+" − "+fmt(q.W)+" = "+fmt(q.sy)+" N\n\nZero net force means the knot has zero acceleration, even though the cable forces are not zero.";
